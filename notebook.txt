@@ -1,0 +1,168 @@
+# 21st october 2016
+- Wrote set_create.py script
+- Script generates one 50-lines file containing the STRING ID ref number
+and the corresponding sequence (one-line) given the .tsv "abundance"
+file, the full database file (sequence in multi-line format) and 
+a crossreference between internal and external codes. Everything
+obtained from the pax-db on the same day.
+
+- Selected dataset: E. coli - Whole organism (Integrated)
+- Dataset selected on the basis of highest "interaction consistency score"
+available (23.74) and 99% coverage. Extracted the 100 most abundant 
+sequences in two -tsv files with 50 internal codes each.
+
+# 22nd october 2016
+- set_create.py refinement
+- abundance raw number is now included in the final files
+# 23rd october 2016
+- Wrote get_coverage.py
+- Script reports raw abundances corresponding to the complete dataset
+and the selected 100 sequences plus the ratio (effective coverage). A 
+cummulative coverage curve is also plotted.
+- Reported effective coverage is 62%
+
+- Wrote get_charge.py
+- Script calculates the charge of each sequence in the 100 seqs set
+and plots a histogram.
+
+# 24th october 2016
+- Edit on set_create.py
+- Mapping to uniprot accession numbers replacing STRING identifiers
+
+- Wrote get_unip_id.py
+- Script extracts uniprot accession numbers to a file that can be 
+submited to the Retrieve/Mapping UniprotKB tool
+- Retrive/Mapping UniprotKB tool translates accession numbers into
+PDB codes when 3D structures are available. 
+	Issue 1: Some proteins are missing structural info -> 13/100
+	Issue 2: Some proteins map to many structuras -> 613 PDBs 
+
+# 03rd november 2016
+- Read up on paxDB
+	- PaxDb is a metaDB that collects the data from other sites
+	- They do the rescaling and scoring of the data but don't
+          accept direct submissions
+	- See wang2011 and wang2015
+- Expand set to 100% PDB coverage
+	- 150 most abundant contain 130 proteins with PDB structures
+	amounting for 1076 structures in total
+	- WTF? Batch-retrieve tool produces a file with 5292 lines
+- Remove sequences not mapped: set_clean.py
+- 3D plot: charge + size + abundance: CAS_plot.py
+- Rescale charge histogram with abundance: get_charge_ab.py
+					   see charge_ab_hist.pdf
+
+# 07th november 2016
+- Map protein localization and classification
+- Length -> Surface area -> Charge density
+- Is there a plane?
+- Human set
+
+# 25th november 2016
+- Human set:
+	- Selected integrated, whole organism set
+		85% coverage
+		14.85 interaction score
+	- Problems mapping from pax-db/string to uniprot. Updated map
+	allowed to find uniprot AC numbers for 146/150 proteins
+	- Repeated entries in the mapping file:
+		Same STRING id to several AC numbers
+		set_create.py now takes only the first occurance
+		112/150 set of unique sequences
+		Pre-set expanded to 200 sequences
+		Final set has 149 sequences
+	- Effective coverage of 43% (total set represent 85%)
+	- Clean set with PDB=true sequences contains 116 entries
+- E. coli set:
+	- new set_create.py version produces the same final set!!
+
+# 07th december 2016
+- Presence of homologs might be introducing bias in the datasets,
+effectively reducing the coverage of protein diversity.
+- Homologs were first detected in human data set
+- CD-hit runs launched with a 0.9 identity threshold (default) and
+default additional settings. (http://weizhongli-lab.org/cd-hit/)
+
+# 17th Jan 2017
+- Jen's article on E.Coli cytosol proteins -> read and ask the author for
+details regarding Additional Table 2.
+- Retrieve or re-run CD-hit jobs!
+
+# 31st Jan 2017
+- First attempt of a script that counts patches of alternating polar and
+non-polar residues: altpatch.py
+	- Patches of exactly 5 residues: P-N-P-N-P or N-P-N-P-N
+	- Residue binary classification following Roseman scale
+	- Use 5-mers as seeds for possible extensions
+
+# 02nd Feb 2017
+- altpatch.py is working without 5-mer extensions
+	- Overcounting of 6-mer as 2 5-mer
+	- When the 5-mer window slides, the condition verifies again
+	- P-N-P-N-P-N scores with sum=3 and again with sum=2 in the next
+	iteration
+	- out of piped into summarySET_class.txt
+	- new summarySET_SET_class_patch.txt generated
+	- format_dummy.py produces a dummy file for matlab
+	- matlab plotting needs to be adapted to produce 3D plots of:
+		charge - abundance - NoPatches 
+- got rid of headers in summarySET files
+	- headers read:
+	UNIPROT	CHARGE	WEIGHT ABUNDANCE  MCPR  NoPATCHES
+	- correct summary files have been written
+	- kept old summarySET_161106.txt for the record
+- formated Ishihama2008 set for analysis in matlab
+- float-number classification (dummy matlab input) spells out as:
+	EXPERIMENTAL	PSORT
+0	Membrane	Membrane
+1	Cytosol		Cytosol	
+2	Periplasm	Periplasm
+3	Ribosome	Unknown
+4	Unknown		--------
+
+# 10th february 2017
+- Discrepancy in netcharge concerning S6
+	- paxdb set: -8
+	- ishihama set: -12
+	- does not seem concern other proteins, not systematic
+	- should fetch again all sequences, this time from uniprot
+
+# 11th february 2017
+- Structurally defined set (ie. with PDB structures avialable) contains
+75 proteins from MY set + 2 good candidates from ISHIHAMA's. 
+- There are only 30 sequences (AC wise) present in both sets!
+
+# 23rd february 2017
+- Dipole moment calculation:
+	- function dipolePDB.py
+	- looper runon.py
+- Some structures are problematic:
+	- 4ybb, 4vi8, 4v89 -> bundles
+	- 2rdo, 1aon 	   -> invalid literal for float
+			   -> coordinates appear join
+			   -> possibly more structures involved
+	- many structures missing residues
+	- how to deal with N and C terminal residues?
+
+# 24th february 2017
+- Dipole moment calculation (follow-up):
+	- bundles:
+		- runon.py now maps the chain identifier using bundle files
+	- joined coordinates:
+		- coordinate extraction does not depend on the spacing anymore
+		- now, coordinates are identified using a regular expression
+		- end of line joint between occupancy and T-factor avoided
+			- take only the first three matches (x,y,z)
+	- PDB 1d8s yields 0.0 dipole moment module (DPM)
+		- all residues are 'unknown' (UNK) due to low resolution 4.4A
+	- missing residues are counted and reported
+	- meaningful DPM values? -> published data for comparison?
+- Limitations and improvements:
+	- bead model approximation
+		- charges and masses are assigned to CA or CB carbon
+		- residue-specific centre of masses could be computed
+		- computationally and programmaticaly demanding
+		- most side chains poorly defined
+		- possible little improvement in accuracy
+	- code could be optimized, modules?
+	 
