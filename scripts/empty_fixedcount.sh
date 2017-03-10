@@ -12,7 +12,7 @@ do
 	if [[ ( -f "$pro" ) ]]
 	then
 		lines=$( wc -l $pro | egrep -o "^[0-9]{1,5}" )
-		if [[ ( "$lines" != "0") ]]
+		if [[ ( "$lines" == "0") ]]
 		then
 			echo "file $file has $lines lines"
 			e=$(( e+1 ))

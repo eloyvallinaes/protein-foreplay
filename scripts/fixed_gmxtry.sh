@@ -11,6 +11,7 @@ do
 	top="$folder"topol.top
 	pro="${full%.*}_processed.gro"
 	itp="$folder"posre.itp
+	log="$folder"fixedgmx.log
         if [[ ( -f "$full" ) ]]
         then
                 lines=$( wc -l $full | egrep -o "^[0-9]{1,5}" )
@@ -18,7 +19,7 @@ do
                 then
                         e=$(( e+1 ))
 			echo "reading file $e ... $full"
-			#gmx pdb2gmx -ignh -f "$full" -o "$pro" -p "$top" -i "$itp" -water "spce"<<< $'15' > "gmxfixed.log" 2>&1
+			gmx pdb2gmx -ignh -f "$full" -o "$pro" -p "$top" -i "$itp" -water "spce"<<< $'15' > "$log" 2>&1
                 fi
         fi
 

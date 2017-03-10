@@ -13,7 +13,7 @@ submissions=open("submitted.txt", 'w')
 for folder in [i for i in os.listdir(".") if os.path.isdir(i)]:
 	folder_list=os.listdir("./"+folder)
 	filepath="./"+folder+"/"+folder+".pdb"
-	regexp=re.compile('[a-z0-9]{4}-[A-Z0-9]{1}_processed\.gro')
+	regexp=re.compile('[a-z0-9]{4}-[A-Z0-9]{1,2}_processed\.gro')
 	if not any(regexp.match(item) for item in folder_list):
 		job=ft.pdbfixsubmit(filepath)
 		submissions.write(folder+"\t"+job+"\n")
@@ -23,4 +23,4 @@ for folder in [i for i in os.listdir(".") if os.path.isdir(i)]:
 		with open("./"+folder+"/fix.log", 'w') as fstd:
 			fstd.write(std)
 submissions.close()
-	
+

@@ -5,15 +5,44 @@ import re
 import os
 import numpy as np
 import math
+def nmrchains(filename,listedfile,chain):
+	f=[line for line in listedfile if re.search(r'^TER|^ATOM|^MODEL|^ENDMDL', line)]
+        aswitch=0
+	chainF=[]
+	out=[]
+        for line in f:
+                if "MODEL" in line:
+                        chainF.append(line)
+                elif "ATOM" in line and line.split()[4] == chain:
+                        chainF.append(line)
+                        aswitch=1
+                elif "TER" in line and line.split()[3] == chain:
+                        chainF.append(line)
+                elif "ENDMDL" in line:
+                        chainF.append(line)
+                        if aswitch == 1:
+                                out=out+chainF
+				chainF=[]
+				aswitch=0
+				continue
+			else:
+                                chainF=[]
+				aswitch=0
+                                continue
+	return filename, chain, out
+if __name__ == '__main__':
+	nmrchains()
 
-def isolatechain(file, chain):
+def isolatechain(filename, chain):
 	"Extracts the ATOM lines of a chain found in a PDB file"
-	f=open(file, 'r').readlines()
-	f=[line for line in f if re.search(r"^ATOM", line)]
-	chainF=[line for line in f if line.split()[4] is chain]
-
-	return file, chain, chainF
-
+	f=open(filename, 'r').readlines()
+	method=[line for line in f if "EXPDTA" in line][0].strip()
+	if 'NMR' in method:
+		[file,chain,chainF]=nmrchains(filename,f,chain)
+	else:
+		f=[line for line in f if re.search(r'^ATOM', line)]
+		chainF=[line for line in f if line.split()[4] == chain]
+	return filename, chain, chainF
 if __name__ == '__main__':
 	isolatechain()
 
@@ -111,3 +140,15 @@ if __name__ == '__main__':
 	bundlemap()
 
 
+def length(filename, chain=""):
+	f=open(filename, 'r').readlines()
+	atoms=[line for line in f if re.search("^ATOM", line)]
+	CA=[line for line in atoms if " CA " in line]
+	if chain:	# file might contain more than one chain
+		CA=[line for line in CA if line.split()[4] == chain]
+	resnum=[line.split()[5] for line in CA]
+	resnum=[int(''.join(re.findall(r'[0-9]+',item))) for item in resnum]
+	return min(resnum), max(resnum), len(set(resnum))
+
+if __name__ == '__main__':
+	length()

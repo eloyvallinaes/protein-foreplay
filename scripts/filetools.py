@@ -14,10 +14,10 @@ def addcol(f1, f2, f2col, f1omit=1, f2omit=1):
 	if len(reciev) != len(source):
 		print("Files have different number of rows!")
 	new=open(f1.split(".")[0]+"_added."+f1.split(".")[1], 'w')
-	
+
 	reciev=[line.strip() for line in reciev]
 	source_field=[line.strip().split("\t")[f2col] for line in source]
-	
+
 	for i in range(0,len(reciev)):
 		new.write(reciev[i]+"\t"+source_field[i]+"\n")
 	new.close()
