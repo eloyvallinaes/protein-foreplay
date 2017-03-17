@@ -19,4 +19,5 @@ do
 	echo $file
 	#gmx convert-tpr -s $oldtpr -f $traj -e $ener -o $newtpr -extend 150 > $log1 2>&1
 	gmx grompp -f $mdp -c $newtpr -o $presstpr -p $topo > $log2 2>&1
-done
+	#gmx grompp -f ../press.mdp -c therm.gro -t therm.cpt -p topol.top -o press.tpr 
+done	# with CHECKPOINT file

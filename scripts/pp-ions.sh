@@ -11,7 +11,7 @@ do
 	mdp="$folder"../ions.mdp
 	mdout="$folder"ions-out.mdp
 	tpr="$folder"ions.tpr
-	log="$folder"tpr-assemb.log
+	log="$folder"ions-assemb.log
 	#echo $tpr
 	#echo $mdp
 	#echo $top

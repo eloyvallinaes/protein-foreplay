@@ -41,7 +41,7 @@ do
 	out="$folder"therm.gro
 	energy="$folder"therm.edr
 	log="$folder"therm-run.log
-	check="$folder"thermstate.cpt
+	check="$folder"therm.cpt
 
 	echo $file
 	gmx mdrun -s "$em" -o "$traj" -cpo "$check" -c "$out" -e "$energy" -g "$log"
