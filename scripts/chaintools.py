@@ -36,8 +36,12 @@ if __name__ == '__main__':
 def isolatechain(filename, chain):
 	"Extracts the ATOM lines of a chain found in a PDB file"
 	f=open(filename, 'r').readlines()
-	method=[line for line in f if "EXPDTA" in line][0].strip()
-	if 'NMR' in method:
+	methodlist=[line for line in f if "EXPDTA" in line]
+	if methodlist:
+		method=methodlist[0].strip()
+	else:
+		method=''
+	if method and 'NMR' in method:
 		[file,chain,chainF]=nmrchains(filename,f,chain)
 	else:
 		f=[line for line in f if re.search(r'^ATOM', line)]

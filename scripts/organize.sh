@@ -11,3 +11,4 @@ do
 done
 
 rm *pdb
+rm *chain-id-mapping.txt
