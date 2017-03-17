@@ -1,0 +1,15 @@
+; input into grompp to generate ions.tpr
+; algorith and output parameters
+integrator	= steep		; Steepest descent minimization
+emtol		= 1000.0	; Minimization force threshold
+emstep		= 0.01		; Energy step size
+nsteps		= 50000		; Maximum number steps
+
+; Neighbour and interaction parameters
+nstlist		= 1		; Update neighbor-list freq
+cutoff-scheme	= Verlet
+ns_type		= grid		; Neighbor list method
+coulombtype	= PME		; Long-range electrostatic method
+rcoulomb	= 1.0		; Short-range electrostatic cut-off
+rvdw		= 1.0		; Short-range Van der Waals cut-off
+pbc		= xyz		; Periodic boundary conditions
