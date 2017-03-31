@@ -13,3 +13,12 @@ gmxrun/
 misc/
 mmtsb_tools/
 mosaic.png
+1a69-A/
+*pdb
+scripts/*pdb
+notebook.txt~
+scripts/ws/2roe-A_m1.pdb~
+scripts/ws/2roe-A_m1.stride
+scripts/ws/HAH1pwt_buried.png
+scripts/ws/HAH1pwt_buried.pse
+scripts/ws/quadrupole.stride

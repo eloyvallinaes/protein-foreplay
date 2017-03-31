@@ -6,6 +6,7 @@ from protein import Residue
 from protein import Snap
 import numpy as np
 import math
+import time
 
 f=open(sys.argv[1], 'r').readlines()
 snap_name=sys.argv[1][:-4]
@@ -29,5 +30,12 @@ for res in reslist:
 
 A=Snap(snap_name, snap_time, reslist)
 
-print A.time, A.dipolemod
+now=time.strftime('%H:%M:S')
+today=time.strftime('%d/%m/%Y')
+spell=(A.time, A.netcharge/A.tSASA, A.dipole[0], A.dipole[1], A.dipole[2],
+	   A.dipolemod, A.quad[0], A.quad[1], A.quad[2], A.guy, A.guydens,
+	   A.nfatty_exp, A.nexp, A.tSASA)
 
+shape='{:>5.0f} {:> .4E} ({:> .4E},{:> .4E},{:> .4E}) {:> .4E} ({:> .4E},{:> .4E},{:> .4E}) {:>8.4f} {:> .4E} {:>4d} {:>4d} {:> .4E}'
+print shape.format(*spell)
+#print A.time, A.guy
