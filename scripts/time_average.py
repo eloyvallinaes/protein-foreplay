@@ -21,7 +21,7 @@ g=open('PDB114set.csv', 'r').readlines()[1:]
 for line in g:
 	l=line.split("\t")
 	if l[15][:4].lower()+'-'+l[16] == folder[:-1]:
-		scl=int(l[10])
+		scl=int(l[9])	#ExpSCL
 
 # format: t chrgdens (dx,dy,dz) dm (q1,q2,q3) guy guydens NFE NExp SASA
 data=np.array([0, 0, 0, 0, 0, 0, 0, 0])
@@ -32,7 +32,8 @@ for line in f:
 	data=data+np.array([l[1], l[5], l[6], l[9], l[10], l[11], l[12], l[13]])
 
 av=data/c	# conformations?
-layout=('{0:>6s} {1[0]:> .4E} {1[1]:> .4E} {1[2]:> .4E} {1[3]:> .4E} {1[4]:> .4E}'
+layout=('{0:>6s} {1[0]:> .4E} {1[1]:> .4E} {1[2]:> .4E} '
+	'{1[3]:> .4E} {1[4]:> .4E} '
 	'{1[5]:> .4E} {1[6]:> .4E} {1[7]:> .4E} {2:>1d}')
 
 print layout.format(folder[:-1], av, scl)
