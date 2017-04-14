@@ -36,6 +36,7 @@ spell=(A.time, A.netcharge/A.tSASA, A.dipole[0], A.dipole[1], A.dipole[2],
 	   A.dipolemod, A.quad[0], A.quad[1], A.quad[2], A.guy, A.guydens,
 	   A.nfatty_exp, A.nexp, A.tSASA)
 
-shape='{:>5.0f} {:> .4E} ({:> .4E},{:> .4E},{:> .4E}) {:> .4E} ({:> .4E},{:> .4E},{:> .4E}) {:>8.4f} {:> .4E} {:>4d} {:>4d} {:> .4E}'
+shape=('{:>5.0f} {:>+.4E} ({:>+.4E},{:>+.4E},{:>+.4E}) '
+       '{:>+.4E} ({:>+.4E},{:>+.4E},{:>+.4E}) {:>8.4f} '
+       '{:>+.4E} {:>4d} {:>4d} {:>+.4E}')
 print shape.format(*spell)
-#print A.time, A.guy

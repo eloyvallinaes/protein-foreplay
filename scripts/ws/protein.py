@@ -11,6 +11,9 @@ weights=dict([("ALA", 89.1), ("ARG", 174.2), ("ASN", 132.1),
               ("MET", 149.2), ("PHE", 165.2), ("PRO", 115.1),
               ("SER", 105.1), ("THR", 119.1), ("TRP", 204.2),
               ("TYR", 181.2), ("VAL", 117.1), ("UNK", 110.0)])
+# Grouped residues
+charged=["ARG", "ASP", "LYS", "GLU"]
+fatty=["ALA", "VAL", "ILE", "LEU", "MET", "PHE", "TYR", "TRP"]
 
 # Atoms masses
 masses=dict([("C", 12.0), ("O", 16.0), ("H", 1.0),
@@ -76,7 +79,7 @@ class Snap:
 	def expfattycount(self):
 		c=0
 		for res in self.reslist:
-			if res.name in ["VAL", "ILE", "LEU"] and res.exposed:
+			if res.name in fatty and res.exposed:
 				c=c+1
 		return c
 
@@ -89,7 +92,7 @@ class Snap:
 				DP=DP-(res.COM-self.COM)
 			else:
 				continue
-		return DP 
+		return DP
 
 	def getdipolemod(self):
 		DP=self.dipole
@@ -113,7 +116,7 @@ class Snap:
 			l=line.split()
 			res.sasa=float(l[-2])
 			res.rsasa=res.sasa/res.mmrsa
-	
+
 	def expcount(self):
 		c=0
 		for res in self.reslist:
@@ -145,7 +148,7 @@ class Snap:
 		Qzx=0
 		Qzy=0
 		for res in self.reslist:
-			if res.name in ["LYS", "ARG", "ASP", "GLU"]:
+			if res.name in charged:
 				rx=res.COM[0]
 				ry=res.COM[1]
 				rz=res.COM[2]
@@ -161,7 +164,7 @@ class Snap:
 				Qzz=Qzz+(3*rz*rz-m)*res.charge
 				Qzx=Qzx+(3*rz*rx)*res.charge
 				Qzy=Qzy+(3*rz*ry)*res.charge
-			
+
 		QM=np.array([[Qxx, Qxy, Qxz],[Qyx, Qyy, Qyz], [Qzx, Qzy, Qzz]])
 		w,v=np.linalg.eig(QM)
 		return w
@@ -175,7 +178,7 @@ class Residue:
 		self.COM=np.array([0.0, 0.0, 0.0])
 		self.weight=weights[name]
 		self.num=self.getnum()
-		
+
 		self.mmrsa=MMRSA[self.name]
 		self.sasa=0.0
 		self.rsasa=0.0
