@@ -24,6 +24,7 @@ for line in g:
 	if l[15][:4].lower()+'-'+l[16] == folder[:-1]:
 		scl=int(l[9])	#ExpSCL
 		mw=int(l[4])	#MW
+		lcop=float(l[13])
 
 # Hydrophobic residues
 fatty=["ALA", "VAL", "ILE", "LEU", "MET", "PHE", "TYR", "TRP"]
@@ -45,8 +46,8 @@ for line in f:
 av=data/c	# conformations?
 layout=('{0:>6s} {1[0]:> .4E} {1[1]:> .4E} {1[2]:> .4E} '
 	'{1[3]:> .4E} {1[4]:> .4E} '
-	'{1[5]:> .4E} {1[6]:> .4E} {1[7]:> .4E} {2:>6d} {3:>3d} {4:>1d}')
+	'{1[5]:> .4E} {1[6]:> .4E} {1[7]:> .4E} {2:>6d} {3:>3d} {4:>1.3f} {5:>1d}')
 
-print layout.format(folder[:-1], av, mw, TFR, scl)
+print layout.format(folder[:-1], av, mw, TFR, lcop, scl)
 
 
