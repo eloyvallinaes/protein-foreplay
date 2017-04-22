@@ -3,7 +3,7 @@
 
 
 # The name of the script is myjob
-#SBATCH -J therm-loop
+#SBATCH -J pr-equi
 
 # Partition (aka queue)
 #SBATCH -p tcb
@@ -12,7 +12,7 @@
 #SBATCH -t 24:00:00		#HH:MM:SS
 
 # Number of CPUs
-# #SBATCH --nodes=1		# use CPU and how many
+#SBATCH --nodes=1		# use CPU and how many
 
 # Memory resources
 # #SBATCH --mem=100 		# in MB
@@ -24,8 +24,8 @@
 #SBATCH -d singleton		# run after process with same jobname
 				# and same username
 
-#SBATCH -e therm.err
-#SBATCH -o therm.out
+#SBATCH -e pr.err
+#SBATCH -o pr.out
 
 # load the gromacs module
 module add gromacs
@@ -33,17 +33,18 @@ module add gromacs
 # run
 path=$( pwd )
 e=0
-for folder in $( ls -d */ )
+for folder in $( ls -d [1,2]*/ )
 do
 	file=${folder%/}
-	em="$folder"therm.tpr
-	traj="$folder"therm.trr
-	out="$folder"therm.gro
-	energy="$folder"therm.edr
-	log="$folder"therm-run.log
-	check="$folder"therm.cpt
+	input="$folder"pr.tpr
+	traj="$folder"pr.trr
+	xtc="$folder"pr.xtc
+	out="$folder"pr.gro
+	energy="$folder"pr.edr
+	log="$folder"pr-run.log
+	check="$folder"pr.cpt
 
 	echo $file
-	gmx mdrun -s "$em" -o "$traj" -cpo "$check" -c "$out" -e "$energy" -g "$log"
+	gmx mdrun -s "$input" -o "$traj" -cpo "$check" -c "$out" -e "$energy" -g "$log"
 
 done

@@ -1,3 +1,4 @@
+scripts2/
 patches/
 PDBset/
 references/
@@ -22,3 +23,6 @@ scripts/ws/2roe-A_m1.stride
 scripts/ws/HAH1pwt_buried.png
 scripts/ws/HAH1pwt_buried.pse
 scripts/ws/quadrupole.stride
+*pdf
+xin_proteins/
+*~

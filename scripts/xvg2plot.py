@@ -11,9 +11,11 @@ parser = argparse.ArgumentParser(description='Get data in xvg file produced by g
 parser.add_argument("xvg-file",
 	help="file containing the data in xvg format", type=str)
 parser.add_argument('--average', help="include the running average",
-	action="store_true")
-parser.add_argument('--save', help="supres showing and save to PDF",
+	nargs='?', type=int, default=-1, const=50)
+parser.add_argument('--save', help="supress showing and save to PDF",
 	type=str)
+parser.add_argument('--noshow', help="supress graphical output",
+	action='store_true')
 
 args=parser.parse_args()
 
@@ -39,19 +41,19 @@ plt.plot(x,y, '-k')
 plt.xlabel(xlabel)
 plt.ylabel(ylabel)
 
-if args.average:
+if args.average != -1:
 	sumY=0
 	count=0
 	running_av=[]
-	for item in y:
+	for item in y[args.average:]:
 		sumY=sumY+item
 		count=count+1
 		running_av.append(sumY/count)
 	print running_av[-1]
-	plt.plot(x,running_av, '-r')
+	plt.plot(x[args.average:],running_av, '-r')
 
 if args.save:
 	fname=args.save.replace('.pdf', '')
 	fig.savefig(fname+'.pdf', bbox_inches='tight')
-else:
+elif not args.noshow:
 	plt.show()

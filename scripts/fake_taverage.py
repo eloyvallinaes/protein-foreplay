@@ -11,20 +11,22 @@ import sys
 import numpy as np
 import re
 import pdb
+
 folder=sys.argv[1]
 path=folder+folder[:-1]+"_trajdata.txt"
-gro=folder+"pro.gro"
+gro=folder+folder[:-1]+"pdb"
 
 f=open(path, 'r').readlines()
-g=open('PDB114set.csv', 'r').readlines()[1:]
-h=open(gro, 'r').readlines()[2:]
-halfa=[line for line in h if line.split()[1] == "CA"]
+g=open('PDB114set_plusxin.csv', 'r').readlines()[1:]
+h=open(gro, 'r').readlines()
+hatom=[line for line in h if re.match("^ATOM", line)]
+halfa=[line for line in hatom if line.split()[1] == "CA"]
 for line in g:
 	l=line.split("\t")
 	if l[15][:4].lower()+'-'+l[16] == folder[:-1]:
 		scl=int(l[9])	#ExpSCL
 		mw=int(l[4])	#MW
-		lcop=float(l[12])
+		lcop=float(l[12]) #logCopyNumber
 
 # Hydrophobic residues
 fatty=["ALA", "VAL", "ILE", "LEU", "MET", "PHE", "TYR", "TRP"]

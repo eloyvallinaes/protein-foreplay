@@ -5,17 +5,16 @@ import re
 import os
 import numpy as np
 import math
-def nmrchains(filename,listedfile,chain):
+def nmrchains(filename,listedfile,chain, aswitch=0):
 	f=[line for line in listedfile if re.search(r'^TER|^ATOM|^MODEL|^ENDMDL', line)]
-        aswitch=0
 	chainF=[]
 	out=[]
         for line in f:
                 if "MODEL" in line:
                         chainF.append(line)
+                        aswitch=aswitch+1
                 elif "ATOM" in line and line.split()[4] == chain:
                         chainF.append(line)
-                        aswitch=1
                 elif "TER" in line and line.split()[3] == chain:
                         chainF.append(line)
                 elif "ENDMDL" in line:
@@ -25,6 +24,9 @@ def nmrchains(filename,listedfile,chain):
 				chainF=[]
 				aswitch=0
 				continue
+			elif aswitch == 2:
+				out=out+chainF
+				break
 			else:
                                 chainF=[]
 				aswitch=0

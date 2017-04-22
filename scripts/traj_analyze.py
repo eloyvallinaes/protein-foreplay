@@ -30,8 +30,6 @@ for res in reslist:
 
 A=Snap(snap_name, snap_time, reslist)
 
-now=time.strftime('%H:%M:S')
-today=time.strftime('%d/%m/%Y')
 spell=(A.time, A.netcharge/A.tSASA, A.dipole[0], A.dipole[1], A.dipole[2],
 	   A.dipolemod, A.quad[0], A.quad[1], A.quad[2], A.guy, A.guydens,
 	   A.nfatty_exp, A.nexp, A.tSASA)

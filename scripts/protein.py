@@ -79,7 +79,7 @@ class Snap:
 	def expfattycount(self):
 		c=0
 		for res in self.reslist:
-			if res.name in fatty and res.exposed:
+			if res.fatty and res.exposed:
 				c=c+1
 		return c
 
@@ -111,7 +111,7 @@ class Snap:
 
 	def getrSASA(self):
 		f=open(self.name+'.stride', 'r').readlines()
-		asg=[line for line in f if 'ASG' in line]
+		asg=[line for line in f if re.match('^ASG',line)]
 		for line, res in zip(asg, self.reslist):
 			l=line.split()
 			res.sasa=float(l[-2])
@@ -183,10 +183,10 @@ class Residue:
 		self.sasa=0.0
 		self.rsasa=0.0
 		self.exposed=False
-		
+
 		self.fatty=self.isfatty()
 		self.guy=Guy[self.name]
-	
+
 	def getnum(self):
 		if len(set([atom.resnum for atom in self.atomlist])) == 1:
 			return self.atomlist[0].resnum
@@ -210,12 +210,15 @@ class Residue:
 			COM=COM+mass_vector
 		COM=COM/M
 		self.COM=COM
-		
+
 	def add_atom(self,atom_object):
 		self.atomlist.append(atom_object)
 
 	def isfatty(self):
-		return 0
+		if self.name in fatty:
+			return True
+		else:
+			return False
 
 class Atom:
 	def __init__(self, atomline):
@@ -238,14 +241,14 @@ class Atom:
 
 	def getresnum(self):
 		return self.atomline.split()[4]
-	
+
 	def getresname(self):
 		return re.findall(r"[A-Z]{3} ", self.atomline[4:])[0].strip()
 
 	def isheavy(self):
 		if self.name == 'H':
 			return False
-		else: 
+		else:
 			return True
 
 	def isbackbone(self):

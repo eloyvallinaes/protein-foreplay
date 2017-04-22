@@ -3,7 +3,7 @@
 
 
 # The name of the script is myjob
-#SBATCH -J press-loop
+#SBATCH -J pr-follow
 
 # Partition (aka queue)
 #SBATCH -p tcb
@@ -12,7 +12,7 @@
 #SBATCH -t 24:00:00		#HH:MM:SS
 
 # Number of CPUs
-# #SBATCH --nodes=1		# use CPU and how many
+#SBATCH --nodes=1		# use CPU and how many
 
 # Memory resources
 # #SBATCH --mem=100 		# in MB
@@ -24,8 +24,8 @@
 #SBATCH -d singleton		# run after process with same jobname
 				# and same username
 
-#SBATCH -e press.err
-#SBATCH -o press.out
+#SBATCH -e pr-followb.err
+#SBATCH -o pr-followb.out
 
 # load the gromacs module
 module add gromacs
@@ -33,18 +33,15 @@ module add gromacs
 # run
 path=$( pwd )
 e=0
-for folder in $( ls -d */ )
-do
+	folder="1dpe-A/"
 	file=${folder%/}
-	input="$folder"press.tpr
-	traj="$folder"press.trr
-	xtc="$folder"press.xtc
-	out="$folder"press.gro
-	energy="$folder"press.edr
-	log="$folder"press-run.log
-	check="$folder"press.cpt
+	input="$folder"pr2.tpr
+	traj="$folder"pr2.trr
+	xtc="$folder"pr2.xtc
+	out="$folder"pr2.gro
+	energy="$folder"pr2.edr
+	log="$folder"pr2-run.log
+	check="$folder"pr2.cpt
 
 	echo $file
 	gmx mdrun -s "$input" -o "$traj" -cpo "$check" -c "$out" -e "$energy" -g "$log"
-
-done
